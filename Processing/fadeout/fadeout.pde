@@ -4,7 +4,7 @@
 void setup() {
   int i, steps = 32, f, c = 16;
 
-  print("PROGMEM uint8_t fade[] = {");
+  print("PROGMEM const uint8_t fade[] = {");
   for(i=0; i<steps; i++) {
     f = (int)(pow((float)i / (float)(steps - 1), 2.6) * 255.0 + 0.5);
     if(i > 0) print(',');

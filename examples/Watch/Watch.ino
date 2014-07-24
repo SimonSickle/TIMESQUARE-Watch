@@ -61,7 +61,7 @@ uint8_t digit[13];
 int     curX;
 
 // Used by various display modes for smooth fade-out before sleep
-PROGMEM uint8_t
+PROGMEM const uint8_t
  fade[] =
   {  0,  1,  1,  2,  4,  5,  8, 10, 13, 17, 22, 27, 32, 39, 46,
     53, 62, 71, 82, 93,105,117,131,146,161,178,196,214,234,255 };
@@ -126,7 +126,7 @@ void loop() {
   watch.swapBuffers();
 }
 
-void blit(uint8_t *img, int iw, int ih, int sx, int sy, int dx, int dy,
+void blit(const uint8_t *img, int iw, int ih, int sx, int sy, int dx, int dy,
  int w, int h, uint8_t b) {
   uint16_t b1;
   uint8_t  shift, x, y;

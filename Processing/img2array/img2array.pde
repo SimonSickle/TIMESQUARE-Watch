@@ -2,15 +2,23 @@
 // Copy and paste output from Processing console to Arduino sketch,
 // change array name as needed ('img[]' used by default).
 void setup() {
+  selectInput("Select a file to process:", "fileSelected");
+}
 
-  String filename;
+void fileSelected(File selection) {
   PImage img;
   int    i, p, c, gamma[] = new int[256];
 
-  if(((filename = selectInput("Select image file...")) != null) &&
-     ((img      = loadImage(filename))                 != null)) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+    return;
+  }
 
-    for(i=0; i<256; i++)
+  String filepath = selection.getAbsolutePath();
+  println("User selected " + filepath);
+  if ((img = loadImage(filepath)) != null) {    
+
+   for(i=0; i<256; i++)
       gamma[i] = (int)(pow(((float)i / 255.0), 2.6) * 255.0 + 0.5);
 
     c = 16; // Column counter -- force initial line wrap
@@ -18,7 +26,7 @@ void setup() {
     img.filter(GRAY); // Convert image to grayscale
     img.loadPixels(); // Make pixels[] array readable
 
-    print("PROGMEM uint8_t img[] = {");
+    print("PROGMEM const uint8_t img[] = {");
     for(i=0; i<img.pixels.length; i++) { // For each pixel...
       p = gamma[img.pixels[i] & 0xFF];   // Get 8-bit value
       if(i > 0) print(',');              // Print preceding comma
@@ -30,7 +38,5 @@ void setup() {
     }
     println(" };");
   }
-
-  exit();
 }
 

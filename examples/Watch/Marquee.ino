@@ -1,6 +1,6 @@
 // Scrolling marquee time/date display.
 
-PROGMEM uint8_t
+PROGMEM const uint8_t
  marqueeDigits[] = {
   0x00,0x00,0x2C,0xDA,0xEB,0x16,0x00,0x0B,0xFF,0x00,0x2C,0xDA,0xD7,0x16,0x00,
   0x2C,0xD1,0xDF,0x16,0x00,0x00,0x00,0x14,0xDC,0x00,0xFF,0xFF,0xFF,0xDF,0x00,
@@ -149,6 +149,8 @@ PROGMEM uint8_t
 #define MARQUEE_SUBMODE_TIME 0
 #define MARQUEE_SUBMODE_DATE 1
 
+#define DATE_DMY  // select date format Day / Month / Year
+
 static int8_t
   marqueeSubmode = MARQUEE_SUBMODE_TIME,
   f              = 0,
@@ -208,11 +210,19 @@ void mode_marquee(uint8_t action) {
       loadDigits(now.year() - 2000, DIGIT_YEAR0);
       loadDigits(now.month()      , DIGIT_MON0);
       loadDigits(now.day()        , DIGIT_DAY0);
+#ifdef DATE_DMY
+      if(digit[DIGIT_DAY0] > 0) str[len++] = digit[DIGIT_DAY0];
+      str[len++] = digit[DIGIT_DAY1];
+      str[len++] = SYM_SLASH;
+      if(digit[DIGIT_MON0] > 0) str[len++] = digit[DIGIT_MON0];
+      str[len++] = digit[DIGIT_MON1];
+#else
       if(digit[DIGIT_MON0] > 0) str[len++] = digit[DIGIT_MON0];
       str[len++] = digit[DIGIT_MON1];
       str[len++] = SYM_SLASH;
       if(digit[DIGIT_DAY0] > 0) str[len++] = digit[DIGIT_DAY0];
       str[len++] = digit[DIGIT_DAY1];
+#endif
       str[len++] = SYM_SLASH;
       str[len++] = digit[DIGIT_YEAR0];
       str[len++] = digit[DIGIT_YEAR1];
@@ -256,4 +266,3 @@ void mode_marquee(uint8_t action) {
     f = 0;
   }
 }
-
